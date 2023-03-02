@@ -4,6 +4,8 @@ var projTableBody = document.getElementById("project-table-body");
 var projName = "";
 var projType = "";
 var projDue = "";
+var projNameFromStor = [];
+var deleteButton = "";
 
 // update time every second
 function displayCurrTime() {
@@ -26,8 +28,11 @@ function getFormInputs(event) {
     printProjInfo();
 
     // closing modal and backdrop
+    // https://stackoverflow.com/questions/46577690/hide-bootstrap-modal-using-pure-javascript-on-click
     var modal = document.getElementById("staticBackdrop");
     modal.classList.remove("show");
+    modal.setAttribute("aria-hidden", "true");
+    modal.setAttribute("style", "display: none");
     var modalBackdrops = document.getElementsByClassName("modal-backdrop");
     document.body.removeChild(modalBackdrops[0]);
   } else {
@@ -65,7 +70,7 @@ function addToLocalStore(name, type, due) {
 
 // print project details to the page
 function printProjInfo() {
-  var projNameFromStor = JSON.parse(localStorage.getItem("Projects"));
+  projNameFromStor = JSON.parse(localStorage.getItem("Projects"));
   // clear out tbody so that a fresh array of projects is printed
   projTableBody.textContent = "";
 
@@ -80,17 +85,39 @@ function printProjInfo() {
       var tdName = document.createElement("td");
       var tdType = document.createElement("td");
       var tdDate = document.createElement("td");
+      var tdButton = document.createElement("button");
+      tdButton.setAttribute("type", "button");
+      tdButton.setAttribute("id", "delete-button");
+      tdButton.setAttribute("aria-label", [i]);
 
       // insert td Data
       tdName.textContent = project.ProjectName;
       tdType.textContent = project.ProjectType;
       tdDate.textContent = project.ProjectDue;
+      tdButton.textContent = "X";
 
       // add to DOM
-      tableRow.append(tdName, tdType, tdDate);
+      tableRow.append(tdName, tdType, tdDate, tdButton);
       projTableBody.append(tableRow);
+
+      deleteButton = document.getElementById("delete-button");
     }
   }
 }
 
 printProjInfo();
+
+//Remove project
+projTableBody.addEventListener("click", function (event) {
+  if (event.target.tagName === "BUTTON") {
+    var ariaIndex = event.target.getAttribute("aria-label");
+    // remove object based on ariaIndex
+    projNameFromStor.splice(ariaIndex, 1);
+    // set new arr to local storage
+    localStorage.setItem("Projects", JSON.stringify(projNameFromStor));
+    // print updated arr
+    printProjInfo();
+  } else {
+    console.log("not a button");
+  }
+});
