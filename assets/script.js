@@ -1,6 +1,5 @@
 // vars
 var projForm = document.getElementById("project-form");
-var projTable = document.getElementById("project-table");
 var projTableBody = document.getElementById("project-table-body");
 var projName = "";
 var projType = "";
@@ -23,6 +22,8 @@ function getFormInputs(event) {
   projDue = document.getElementById("project-date").value;
 
   addToLocalStore(projName, projType, projDue);
+
+  printProjInfo();
 }
 
 projForm.addEventListener("submit", getFormInputs);
@@ -56,25 +57,30 @@ function addToLocalStore(name, type, due) {
 // print project details to the page
 function printProjInfo() {
   var projNameFromStor = JSON.parse(localStorage.getItem("Projects"));
-  console.log(projNameFromStor);
+  // clear out tbody so that a fresh array of projects is printed
+  projTableBody.textContent = "";
 
-  for (var i = 0; i < projNameFromStor.length; i++) {
-    var project = projNameFromStor[i];
+  if (projNameFromStor === null) {
+    return;
+  } else {
+    for (var i = 0; i < projNameFromStor.length; i++) {
+      var project = projNameFromStor[i];
 
-    // create row
-    var tableRow = document.createElement("tr");
-    var tdName = document.createElement("td");
-    var tdType = document.createElement("td");
-    var tdDate = document.createElement("td");
+      // create row
+      var tableRow = document.createElement("tr");
+      var tdName = document.createElement("td");
+      var tdType = document.createElement("td");
+      var tdDate = document.createElement("td");
 
-    // insert td Data
-    tdName.textContent = project.ProjectName;
-    tdType.textContent = project.ProjectType;
-    tdDate.textContent = project.ProjectDue;
+      // insert td Data
+      tdName.textContent = project.ProjectName;
+      tdType.textContent = project.ProjectType;
+      tdDate.textContent = project.ProjectDue;
 
-    // add to DOM
-    tableRow.append(tdName, tdType, tdDate);
-    projTableBody.append(tableRow);
+      // add to DOM
+      tableRow.append(tdName, tdType, tdDate);
+      projTableBody.append(tableRow);
+    }
   }
 }
 
