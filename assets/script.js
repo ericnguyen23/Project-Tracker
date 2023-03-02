@@ -21,9 +21,12 @@ function getFormInputs(event) {
   projType = document.getElementById("project-type").value;
   projDue = document.getElementById("project-date").value;
 
-  addToLocalStore(projName, projType, projDue);
-
-  printProjInfo();
+  if (projName.length !== 0 && projDue.length !== 0) {
+    addToLocalStore(projName, projType, projDue);
+    printProjInfo();
+  } else {
+    alert("please fill in fields");
+  }
 }
 
 projForm.addEventListener("submit", getFormInputs);
