@@ -21,23 +21,41 @@ function getFormInputs(event) {
   projType = document.getElementById("project-type").value;
   projDue = document.getElementById("project-date").value;
 
-  addToLocalStore(projName + " Project", projName);
-  addToLocalStore(projName + " Project Type", projType);
-  addToLocalStore(projName + " Project Due", projDue);
-
-  printProjInfo();
+  addToLocalStore(projName, projType, projDue);
 }
 
 projForm.addEventListener("submit", getFormInputs);
 
 // add input values to local storage
-function addToLocalStore(desc, value) {
-  localStorage.setItem(desc, value);
+function addToLocalStore(name, type, due) {
+  // check if local storage is not empty
+  if (localStorage.getItem("Projects") !== null) {
+    // if not empty then get existing array and add to it or else it will overwrite
+    var existingProj = JSON.parse(localStorage.getItem("Projects"));
+    var storageObj = {
+      ProjectName: name,
+      ProjectType: type,
+      ProjectDue: due,
+    };
+    existingProj.push(storageObj);
+    localStorage.setItem("Projects", JSON.stringify(existingProj));
+  } else {
+    // if storage is empty just simply add new arr
+    var storageArr = [];
+    var storageObj = {
+      ProjectName: name,
+      ProjectType: type,
+      ProjectDue: due,
+    };
+    storageArr.push(storageObj);
+    localStorage.setItem("Projects", JSON.stringify(storageArr));
+  }
 }
 
 // print project details to the page
 function printProjInfo() {
-  console.log(projTable);
+  // var projNameFromStor = localStorage.getItem("");
+  // console.log(projTable);
 
   var tableRow = document.createElement("tr");
   var tableData = document.createElement("td");
@@ -45,5 +63,5 @@ function printProjInfo() {
   tableRow.appendChild(tableData);
   projTable.appendChild(tableRow);
   // TODO: This data should be coming from LocalStorage though
-  tableData.textContent = projName;
+  // tableData.textContent = projName;
 }
