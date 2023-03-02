@@ -19,6 +19,7 @@ setInterval(displayCurrTime, 1000);
 // capture form data
 function getFormInputs(event) {
   event.preventDefault();
+
   projName = document.getElementById("project-name").value;
   projType = document.getElementById("project-type").value;
   projDue = document.getElementById("project-date").value;
@@ -27,16 +28,9 @@ function getFormInputs(event) {
     addToLocalStore(projName, projType, projDue);
     printProjInfo();
 
-    // closing modal and backdrop
-    // https://stackoverflow.com/questions/46577690/hide-bootstrap-modal-using-pure-javascript-on-click
-    var modal = document.getElementById("staticBackdrop");
-    modal.classList.remove("show");
-    modal.setAttribute("aria-hidden", "true");
-    modal.setAttribute("style", "display: none");
-    var modalBackdrops = document.getElementsByClassName("modal-backdrop");
-    document.body.removeChild(modalBackdrops[0]);
-  } else {
-    alert("please fill in fields");
+    // TODO: try to empty out the input fields
+    document.getElementById("project-name").value = "";
+    document.getElementById("project-date").value = "";
   }
 }
 
@@ -117,7 +111,5 @@ projTableBody.addEventListener("click", function (event) {
     localStorage.setItem("Projects", JSON.stringify(projNameFromStor));
     // print updated arr
     printProjInfo();
-  } else {
-    console.log("not a button");
   }
 });
