@@ -1,6 +1,7 @@
 // vars
 var projForm = document.getElementById("project-form");
 var projTable = document.getElementById("project-table");
+var projTableBody = document.getElementById("project-table-body");
 var projName = "";
 var projType = "";
 var projDue = "";
@@ -54,14 +55,27 @@ function addToLocalStore(name, type, due) {
 
 // print project details to the page
 function printProjInfo() {
-  // var projNameFromStor = localStorage.getItem("");
-  // console.log(projTable);
+  var projNameFromStor = JSON.parse(localStorage.getItem("Projects"));
+  console.log(projNameFromStor);
 
-  var tableRow = document.createElement("tr");
-  var tableData = document.createElement("td");
+  for (var i = 0; i < projNameFromStor.length; i++) {
+    var project = projNameFromStor[i];
 
-  tableRow.appendChild(tableData);
-  projTable.appendChild(tableRow);
-  // TODO: This data should be coming from LocalStorage though
-  // tableData.textContent = projName;
+    // create row
+    var tableRow = document.createElement("tr");
+    var tdName = document.createElement("td");
+    var tdType = document.createElement("td");
+    var tdDate = document.createElement("td");
+
+    // insert td Data
+    tdName.textContent = project.ProjectName;
+    tdType.textContent = project.ProjectType;
+    tdDate.textContent = project.ProjectDue;
+
+    // add to DOM
+    tableRow.append(tdName, tdType, tdDate);
+    projTableBody.append(tableRow);
+  }
 }
+
+printProjInfo();
