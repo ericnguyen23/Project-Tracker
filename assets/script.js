@@ -24,6 +24,12 @@ function getFormInputs(event) {
   if (projName.length !== 0 && projDue.length !== 0) {
     addToLocalStore(projName, projType, projDue);
     printProjInfo();
+
+    // closing modal and backdrop
+    var modal = document.getElementById("staticBackdrop");
+    modal.classList.remove("show");
+    var modalBackdrops = document.getElementsByClassName("modal-backdrop");
+    document.body.removeChild(modalBackdrops[0]);
   } else {
     alert("please fill in fields");
   }
